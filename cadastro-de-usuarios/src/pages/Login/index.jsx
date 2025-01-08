@@ -44,7 +44,7 @@ function Login() {
                     setError('Credenciais inválidas. Tente novamente.');
                 }
             } catch (error) {
-                setError('Erro no servidor. Tente novamente mais tarde.');
+                setError('Credenciais inválidas. Tente novamente.');
             }
         }
     };
