@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import './login.css'
 import { Link, useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import api from '../../services/api'
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
 
     const navigate = useNavigate();
@@ -47,14 +49,49 @@ function Login() {
         }
     };
 
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        if (e.target.value === "") {
+            setShowPassword(false);
+        }
+    }
+
+    const toggleShowPassword = () => {
+        if (password) {
+            setShowPassword(!showPassword); 
+        }
+    };
 
     return (
         <div className='container'>
             <form onSubmit={handleSubmit}>
                 <h1>Login</h1>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-                <input type="email" name='email' placeholder='E-mail' value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" name='senha' placeholder='Senha' value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input 
+                    type="email" 
+                    name='email' 
+                    placeholder='E-mail' 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <div className="form-group">
+                <input 
+                    type={showPassword ? 'text' : 'password'}
+                    name='senha' 
+                    placeholder='Senha' 
+                    value={password} 
+                    onChange={handlePasswordChange} 
+                    className="input-field"
+                />
+                {password && (
+                <span
+                    onClick={toggleShowPassword}
+                    className="toggle-password"
+                >
+                    {showPassword ? <FaEye /> : <FaEyeSlash />}
+                </span>
+                )}
+                </div>
                 <button type='submit'>Entrar</button>
                 <p>Não tem uma conta?
                     <Link className='link' to={"/register"}> Cadastre-se</Link>
