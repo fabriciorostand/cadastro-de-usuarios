@@ -1,26 +1,61 @@
-import { useEffect, useState, useRef } from 'react'
+import { useState } from 'react'
 import './login.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api'
-import Register from '../Register'
 
 function Login() {
-    const [users, setUsers] = useState([])
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    const inputEmail = useRef()
-    const inputPassword = useRef()
+    const navigate = useNavigate();
 
-    useEffect(() => {
+    const validateLogin = () => {
+        if (!email || !password) {
+            setError('E-mail e senha são obrigatórios.');
+            return false;
+        }
 
-    }, [])
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError('E-mail inválido.');
+            return false;
+        }
+
+        if (password.length < 8) {
+            setError('A senha deve ter pelo menos 8 caracteres.');
+            return false;
+        }
+
+        setError('');
+        return true;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (validateLogin()) {
+            try {
+                const response = await api.post('/login', { email, password });
+                if (response.data.success) {
+                    navigate(`/welcome/${response.data.name}`);
+                } else {
+                    setError('Credenciais inválidas. Tente novamente.');
+                }
+            } catch (error) {
+                setError('Erro no servidor. Tente novamente mais tarde.');
+            }
+        }
+    };
+
 
     return (
         <div className='container'>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <h1>Login</h1>
-                <input type="email" name='email' placeholder='E-mail' ref={inputEmail} />
-                <input type="password" name='senha' placeholder='Senha' ref={inputPassword} />
-                <button type='button'>Entrar</button>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <input type="email" name='email' placeholder='E-mail' value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="password" name='senha' placeholder='Senha' value={password} onChange={(e) => setPassword(e.target.value)} />
+                <button type='submit'>Entrar</button>
                 <p>Não tem uma conta?
                     <Link className='link' to={"/register"}> Cadastre-se</Link>
                 </p>
