@@ -16,7 +16,7 @@ function Welcome() {
     return (
         <div>
             <header>
-                <Link className='link' to={"/login"}>
+                <Link className='logo-link' to={`/welcome/${name}`}>
                     <img src={Toupeira} />
                     Toup
                 </Link>
@@ -29,7 +29,9 @@ function Welcome() {
                                 <ul>
                                     <li>Perfil</li>
                                     <li>Configurações</li>
-                                    <li>Sair</li>
+                                    <li>
+                                        <Link className='li-link' to={"/login"}>Sair</Link>
+                                    </li>
                                 </ul>
                             </div>
                         )}
