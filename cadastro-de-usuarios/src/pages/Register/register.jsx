@@ -92,19 +92,6 @@ function Register() {
         </p>
       </form>
 
-      {users.map((user) => (
-        <div key={user._id} className='card'>
-          <div>
-            <p>Nome: <span>{user.name}</span></p>
-            <p>E-mail: <span>{user.email}</span></p>
-            <p>Senha: <span>{user.password}</span></p>
-          </div>
-          <button onClick={() => deleteUsers(user._id)}>
-            <img src={Trash} />
-          </button>
-        </div>
-      ))}
-
     </div>
   )
 }
