@@ -6,9 +6,11 @@ import Login from './pages/Login/login'
 import Welcome from './pages/Welcome/welcome'
 import Register from './pages/Register/register'
 
+const basename = "/cadastro-de-usuarios"
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Router>
+    <Router basename={basename}>
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path="/welcome/:name" element={<Welcome />} />
