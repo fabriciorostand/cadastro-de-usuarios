@@ -1,16 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import './index.css'
 import Login from './pages/Login/login'
 import Welcome from './pages/Welcome/welcome'
 import Register from './pages/Register/register'
 
-const basename = "/cadastro-de-usuarios"
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Router basename={basename}>
+    <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path='/login' element={<Login />} />
