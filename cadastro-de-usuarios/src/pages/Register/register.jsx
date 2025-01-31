@@ -21,24 +21,32 @@ function Register() {
   }
 
   async function createUsers() {
-    try {
-      await api.post('/users', {
-        name: inputName.current.value,
-        email: inputEmail.current.value,
-        password: inputPassword.current.value
-      });
-      setSuccessMessage('Cadastro realizado com sucesso!');
-      setErrorMessage('');
-      getUsers();
-    } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setErrorMessage('Este e-mail já foi usado para cadastrar uma conta. Tente outro.');
-      } else {
-        setErrorMessage('Erro ao cadastrar usuário. Tente novamente.');
-      }
-      setSuccessMessage('');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(inputEmail.current.value)) {
+        setErrorMessage('O e-mail fornecido é inválido.');
+        setSuccessMessage('');
+        return;
     }
-  }
+
+    try {
+        await api.post('/users', {
+            name: inputName.current.value,
+            email: inputEmail.current.value,
+            password: inputPassword.current.value
+        });
+        setSuccessMessage('Cadastro realizado com sucesso!');
+        setErrorMessage('');
+        getUsers();
+    } catch (error) {
+        if (error.response && error.response.status === 409) {
+            setErrorMessage('O e-mail já foi utilizado para cadastrar uma conta.');
+        } else {
+            setErrorMessage('Erro ao cadastrar usuário. Tente novamente.');
+        }
+        setSuccessMessage('');
+    }
+}
 
   useEffect(() => {
     getUsers();
