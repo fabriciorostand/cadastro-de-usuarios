@@ -32,7 +32,7 @@ function Register() {
       getUsers();
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        setErrorMessage('Este e-mail já está utilizado para cadastrar uma conta. Tente outro.');
+        setErrorMessage('Este e-mail já foi usado para cadastrar uma conta. Tente outro.');
       } else {
         setErrorMessage('Erro ao cadastrar usuário. Tente novamente.');
       }
