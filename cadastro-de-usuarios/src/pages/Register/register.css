@@ -11,6 +11,18 @@ h1 {
     text-align: center;
 }
 
+.success {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+  
+.error {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+  
 form {
     display: flex;
     flex-direction: column;
@@ -57,33 +69,4 @@ form p {
 form .link {
     text-decoration: none;
     color: #8B8AE1;
-}
-
-.card {
-    display: flex;
-    justify-content: space-between;
-    background-color: #2E2D4E;
-    margin: 10px;
-    padding: 10px;
-    width: 400px;
-    border-radius: 10px;
-
-    & p {
-        color: #ffffff;
-        font-weight: bold;
-
-        & span {
-            font-weight: normal;
-        }
-    }
-
-    & button {
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-    }
-
-    & button:hover {
-        opacity: 0.5;
-    }
 }

@@ -1,50 +1,55 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import './register.css'
-import Trash from '../../assets/trash.png'
-import api from '../../services/api'
+import './register.css';
+import api from '../../services/api';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Register() {
   const [users, setUsers] = useState([]);
-  const [password, setPassword] = useState(''); const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const inputName = useRef()
-  const inputEmail = useRef()
-  const inputPassword = useRef()
+  const inputName = useRef();
+  const inputEmail = useRef();
+  const inputPassword = useRef();
 
   async function getUsers() {
-    const usersFromApi = await api.get('/users')
-
-    setUsers(usersFromApi.data)
+    const usersFromApi = await api.get('/users');
+    setUsers(usersFromApi.data);
   }
 
   async function createUsers() {
-    await api.post('/users', {
-      name: inputName.current.value,
-      email: inputEmail.current.value,
-      password: inputPassword.current.value
-    })
-
-    getUsers()
-  }
-
-  async function deleteUsers(_id) {
-    await api.delete(`/users/${_id}`)
-
-    getUsers()
+    try {
+      await api.post('/users', {
+        name: inputName.current.value,
+        email: inputEmail.current.value,
+        password: inputPassword.current.value
+      });
+      setSuccessMessage('Cadastro realizado com sucesso!');
+      setErrorMessage('');
+      getUsers();
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setErrorMessage('Este e-mail já foi utilizado para cadastrar uma conta.');
+      } else {
+        setErrorMessage('Erro ao cadastrar usuário. Tente novamente.');
+      }
+      setSuccessMessage('');
+    }
   }
 
   useEffect(() => {
-    getUsers()
-  }, [])
+    getUsers();
+  }, []);
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
     if (e.target.value === "") {
       setShowPassword(false);
     }
-  }
+  };
 
   const toggleShowPassword = () => {
     if (password) {
@@ -56,6 +61,8 @@ function Register() {
     <div className='container'>
       <form>
         <h1>Cadastro</h1>
+        {successMessage && <p className="success">{successMessage}</p>}
+        {errorMessage && <p className="error">{errorMessage}</p>}
         <input
           type="text"
           name='nome'
@@ -91,9 +98,8 @@ function Register() {
           <Link className='link' to={"/login"}> Conecte-se</Link>
         </p>
       </form>
-
     </div>
-  )
+  );
 }
 
-export default Register
+export default Register;
