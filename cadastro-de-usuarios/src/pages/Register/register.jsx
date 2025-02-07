@@ -1,56 +1,56 @@
-import { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './register.css';
-import api from '../../services/api';
+import { registerUser } from '../../services/api'; // Importa a função de registro
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 function Register() {
-  const [users, setUsers] = useState([]);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const inputName = useRef();
   const inputEmail = useRef();
   const inputPassword = useRef();
 
-  async function getUsers() {
-    const usersFromApi = await api.get('/users');
-    setUsers(usersFromApi.data);
-  }
+  const navigate = useNavigate();
 
-  async function createUsers() {
+  const validateRegister = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(inputEmail.current.value)) {
-        setErrorMessage('O e-mail fornecido é inválido.');
-        setSuccessMessage('');
-        return;
+      setErrorMessage('O e-mail fornecido é inválido.');
+      return false;
     }
 
-    try {
-        await api.post('/users', {
-            name: inputName.current.value,
-            email: inputEmail.current.value,
-            password: inputPassword.current.value
+    if (inputPassword.current.value.length < 8) {
+      setErrorMessage('A senha deve ter pelo menos 8 caracteres.');
+      return false;
+    }
+
+    setErrorMessage('');
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateRegister()) {
+      try {
+        const response = await registerUser({
+          name: inputName.current.value,
+          email: inputEmail.current.value,
+          password: inputPassword.current.value,
         });
-        setSuccessMessage('Cadastro realizado com sucesso!');
-        setErrorMessage('');
-        getUsers();
-    } catch (error) {
+        navigate(`/welcome/${inputName.current.value}`); // Passe o nome do usuário na navegação
+      } catch (error) {
         if (error.response && error.response.status === 409) {
-            setErrorMessage('O e-mail já foi utilizado para cadastrar uma conta.');
+          setErrorMessage('O e-mail já foi utilizado para cadastrar uma conta.');
         } else {
-            setErrorMessage('Erro ao cadastrar usuário. Tente novamente.');
+          setErrorMessage('Erro ao cadastrar usuário. Tente novamente.');
         }
-        setSuccessMessage('');
+      }
     }
-}
-
-  useEffect(() => {
-    getUsers();
-  }, []);
+  };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
@@ -67,9 +67,8 @@ function Register() {
 
   return (
     <div className='container'>
-      <form>
+      <form onSubmit={handleSubmit}>
         <h1>Cadastro</h1>
-        {successMessage && <p className="success">{successMessage}</p>}
         {errorMessage && <p className="error">{errorMessage}</p>}
         <input
           type="text"
@@ -101,7 +100,7 @@ function Register() {
             </span>
           )}
         </div>
-        <button type='button' onClick={createUsers}>Cadastrar</button>
+        <button type='submit'>Cadastrar</button>
         <p>Tem uma conta?
           <Link className='link' to={"/login"}> Conecte-se</Link>
         </p>

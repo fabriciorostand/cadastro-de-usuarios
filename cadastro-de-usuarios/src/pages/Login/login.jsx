@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import './login.css'
+import { useState } from 'react';
+import './login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
-import api from '../../services/api'
+import { loginUser } from '../../services/api';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -37,12 +37,11 @@ function Login() {
         e.preventDefault();
         if (validateLogin()) {
             try {
-                const response = await api.post('/login', { email, password });
-                if (response.data.success) {
-                    navigate(`/welcome/${response.data.name}`);
-                } else {
-                    setError('Credenciais inválidas. Tente novamente.');
-                }
+                const { token, userId, name } = await loginUser(email, password);
+                // Armazene o token JWT e o nome do usuário no localStorage
+                localStorage.setItem('token', token);
+                localStorage.setItem('username', name);
+                navigate(`/welcome/${name}`);
             } catch (error) {
                 setError('Credenciais inválidas. Tente novamente.');
             }
@@ -54,7 +53,7 @@ function Login() {
         if (e.target.value === "") {
             setShowPassword(false);
         }
-    }
+    };
 
     const toggleShowPassword = () => {
         if (password) {
@@ -98,7 +97,7 @@ function Login() {
                 </p>
             </form>
         </div>
-    )
+    );
 }
 
-export default Login
+export default Login;
