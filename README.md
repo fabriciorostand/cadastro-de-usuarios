@@ -10,6 +10,8 @@
 
   - Login seguro com verificação de senha hasheada.
 
+  - Utilização de JSON Web Tokens (JWT) para autenticação segura de usuários.
+
 - <h3>Gerenciamento de Usuários:</h3>
 
   - Criação, leitura, atualização e exclusão de usuários.
