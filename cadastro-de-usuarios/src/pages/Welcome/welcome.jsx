@@ -7,21 +7,23 @@ import api from '../../services/api';
 
 function Welcome() {
     const [name, setName] = useState('');
+    const [profilePic, setProfilePic] = useState(null); // Adicionando estado para imagem de perfil
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const userId = localStorage.getItem('userId'); // Recuperar o userId do localStorage
 
     useEffect(() => {
-        const fetchUserName = async () => {
+        const fetchUserData = async () => {
             try {
                 const response = await api.get(`/api/users/${userId}`);
                 setName(response.data.name);
+                setProfilePic(response.data.profilePic || null); // Configurar a foto de perfil
             } catch (error) {
-                console.error('Erro ao carregar nome do usuário:', error);
+                console.error('Erro ao carregar dados do usuário:', error);
             }
         };
 
         if (userId) {
-            fetchUserName();
+            fetchUserData();
         }
     }, [userId]);
 
@@ -46,23 +48,25 @@ function Welcome() {
                     Toup
                 </Link>
                 <div className='avatar-container'>
-                    <div>
+                    {profilePic ? (
+                        <img src={`http://localhost:8080/uploads/${profilePic.split('\\').pop()}`} alt="Foto de Perfil" className='avatar' />
+                    ) : (
                         <FaUserCircle className='avatar' onClick={toggleDropdown} />
-                        <FaCaretDown className='arrow' onClick={toggleDropdown} />
-                        {isDropdownVisible && (
-                            <div className='dropdown-menu'>
-                                <ul>
-                                    <li>
-                                        <Link className='li-link' to={`/profile/${userId}`}>Perfil</Link>
-                                    </li>
-                                    <li>Configurações</li>
-                                    <li>
-                                        <Link className='li-link' to={"/login"} onClick={handleLogout}>Sair</Link> {/* Alterado para Link */}
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-                    </div>
+                    )}
+                    <FaCaretDown className='arrow' onClick={toggleDropdown} />
+                    {isDropdownVisible && (
+                        <div className='dropdown-menu'>
+                            <ul>
+                                <li>
+                                    <Link className='li-link' to={`/profile/${userId}`}>Perfil</Link>
+                                </li>
+                                <li>Configurações</li>
+                                <li>
+                                    <Link className='li-link' to={"/login"} onClick={handleLogout}>Sair</Link>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </header>
             <div className='welcome-container'>

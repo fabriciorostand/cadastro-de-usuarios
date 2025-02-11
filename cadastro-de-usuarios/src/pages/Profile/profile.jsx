@@ -12,6 +12,7 @@ function Profile() {
     const [email, setEmail] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [profilePic, setProfilePic] = useState(null); // Estado para a foto de perfil
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isDropdownVisible, setDropdownVisible] = useState(false);
@@ -25,6 +26,9 @@ function Profile() {
                 const response = await api.get(`/api/users/${userId}`);
                 setName(response.data.name);
                 setEmail(response.data.email);
+                // Transformar o caminho absoluto em relativo
+                const relativeProfilePic = response.data.profilePic ? response.data.profilePic.replace(/\\/g, '/').split('uploads/')[1] : null;
+                setProfilePic(relativeProfilePic);
             } catch (error) {
                 setError('Erro ao carregar dados do usuário');
                 console.error('Erro ao carregar dados do usuário:', error);
@@ -52,6 +56,27 @@ function Profile() {
             setError('Erro ao atualizar as informações. Tente novamente.');
             setSuccess('');
             console.error('Erro ao atualizar as informações:', error);
+        }
+    };
+
+    const handleProfilePicUpload = async (e) => {
+        const formData = new FormData();
+        formData.append('profilePic', e.target.files[0]);
+
+        try {
+            const response = await api.post('/api/users/profile-pic', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            const relativeProfilePic = response.data.profilePic ? response.data.profilePic.replace(/\\/g, '/').split('uploads/')[1] : null;
+            setProfilePic(relativeProfilePic);
+            setSuccess('Foto de perfil atualizada com sucesso!');
+            setError('');
+        } catch (error) {
+            setError('Erro ao atualizar foto de perfil. Tente novamente.');
+            setSuccess('');
+            console.error('Erro ao atualizar foto de perfil:', error);
         }
     };
 
@@ -92,34 +117,36 @@ function Profile() {
                     Toup
                 </Link>
                 <div className='avatar-container'>
-                    <div>
+                    {profilePic ? (
+                        <img src={`http://localhost:8080/uploads/${profilePic}`} alt="Foto de Perfil" />
+                    ) : (
                         <FaUserCircle className='avatar' onClick={toggleDropdown} />
-                        <FaCaretDown className='arrow' onClick={toggleDropdown} />
-                        {isDropdownVisible && (
-                            <div className='dropdown-menu'>
-                                <ul>
-                                    <li>
-                                        <Link 
-                                            className='li-link' 
-                                            to={`/profile/${userId}`}
-                                        >
-                                            Perfil
-                                        </Link>
-                                    </li>
-                                    <li>Configurações</li>
-                                    <li>
-                                        <Link 
-                                            className='li-link' 
-                                            to="/login" 
-                                            onClick={handleLogout}
-                                        >
-                                            Sair
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        )}
-                    </div>
+                    )}
+                    <FaCaretDown className='arrow' onClick={toggleDropdown} />
+                    {isDropdownVisible && (
+                        <div className='dropdown-menu'>
+                            <ul>
+                                <li>
+                                    <Link 
+                                        className='li-link' 
+                                        to={`/profile/${userId}`}
+                                    >
+                                        Perfil
+                                    </Link>
+                                </li>
+                                <li>Configurações</li>
+                                <li>
+                                    <Link 
+                                        className='li-link' 
+                                        to="/login" 
+                                        onClick={handleLogout}
+                                    >
+                                        Sair
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
             </header>
             <div className='profile-container'>
@@ -143,6 +170,14 @@ function Profile() {
                             id="email"
                             value={email}
                             disabled
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="profilePic">Foto de Perfil:</label>
+                        <input
+                            type="file"
+                            id="profilePic"
+                            onChange={handleProfilePicUpload}
                         />
                     </div>
                     <div className="form-group">

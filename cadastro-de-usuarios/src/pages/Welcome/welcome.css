@@ -28,6 +28,15 @@ header .avatar-container {
     margin-right: 15px;
 }
 
+header .avatar-container img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
 header .avatar {
     display: flex;
     height: 50px;
@@ -65,12 +74,12 @@ header .dropdown-menu ul {
 header .dropdown-menu li {
     padding: 10px 20px;
     cursor: pointer;
-    display: block; 
+    display: block;
 }
 
 header .dropdown-menu li .li-link {
     text-decoration: none;
-    display: block; 
+    display: block;
     width: 100%;
 }
 
