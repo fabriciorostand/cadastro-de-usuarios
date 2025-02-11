@@ -36,12 +36,16 @@ function Register() {
     e.preventDefault();
     if (validateRegister()) {
       try {
-        const response = await registerUser({
+        const { user, token } = await registerUser({
           name: inputName.current.value,
           email: inputEmail.current.value,
           password: inputPassword.current.value,
         });
-        navigate(`/welcome/${inputName.current.value}`); // Passe o nome do usuário na navegação
+        // Armazene o token JWT e o userId no localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', user._id);
+        localStorage.setItem('username', user.name);
+        navigate(`/welcome/${user.name}`); // Passe o nome do usuário na navegação
       } catch (error) {
         if (error.response && error.response.status === 409) {
           setErrorMessage('O e-mail já foi utilizado para cadastrar uma conta.');

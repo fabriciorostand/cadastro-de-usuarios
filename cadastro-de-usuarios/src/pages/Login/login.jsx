@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './login.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; 
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { loginUser } from '../../services/api';
 
 function Login() {
@@ -40,6 +40,7 @@ function Login() {
                 const { token, userId, name } = await loginUser(email, password);
                 // Armazene o token JWT e o nome do usuário no localStorage
                 localStorage.setItem('token', token);
+                localStorage.setItem('userId', userId); // Salva o userId
                 localStorage.setItem('username', name);
                 navigate(`/welcome/${name}`);
             } catch (error) {
@@ -57,7 +58,7 @@ function Login() {
 
     const toggleShowPassword = () => {
         if (password) {
-            setShowPassword(!showPassword); 
+            setShowPassword(!showPassword);
         }
     };
 
@@ -66,30 +67,30 @@ function Login() {
             <form onSubmit={handleSubmit}>
                 <h1>Login</h1>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-                <input 
-                    type="email" 
-                    name='email' 
-                    placeholder='E-mail' 
-                    value={email} 
+                <input
+                    type="email"
+                    name='email'
+                    placeholder='E-mail'
+                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
                 <div className="form-group">
-                <input 
-                    type={showPassword ? 'text' : 'password'}
-                    name='senha' 
-                    placeholder='Senha' 
-                    value={password} 
-                    onChange={handlePasswordChange} 
-                    className="input-field"
-                />
-                {password && (
-                <span
-                    onClick={toggleShowPassword}
-                    className="toggle-password"
-                >
-                    {showPassword ? <FaEye /> : <FaEyeSlash />}
-                </span>
-                )}
+                    <input
+                        type={showPassword ? 'text' : 'password'}
+                        name='senha'
+                        placeholder='Senha'
+                        value={password}
+                        onChange={handlePasswordChange}
+                        className="input-field"
+                    />
+                    {password && (
+                        <span
+                            onClick={toggleShowPassword}
+                            className="toggle-password"
+                        >
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </span>
+                    )}
                 </div>
                 <button type='submit'>Entrar</button>
                 <p>Não tem uma conta?

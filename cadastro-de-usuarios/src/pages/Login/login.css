@@ -39,10 +39,10 @@ form button:hover {
 
 form input {
     border: 1px solid #48456C;
-     border-radius: 30px;
-     height: 40px;
+    border-radius: 30px;
+    height: 40px;
     background-color: #363653;
-     color: #ffffff;
+    color: #ffffff;
     font-size: 16px;
     padding-left: 10px;
     outline: none;

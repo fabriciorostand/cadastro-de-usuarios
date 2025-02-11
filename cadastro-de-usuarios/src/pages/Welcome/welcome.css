@@ -65,10 +65,13 @@ header .dropdown-menu ul {
 header .dropdown-menu li {
     padding: 10px 20px;
     cursor: pointer;
+    display: block; 
 }
 
 header .dropdown-menu li .li-link {
     text-decoration: none;
+    display: block; 
+    width: 100%;
 }
 
 header .dropdown-menu li:hover {

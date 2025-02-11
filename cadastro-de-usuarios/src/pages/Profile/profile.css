@@ -1,0 +1,59 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 70px);
+}
+
+.profile-container h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 50px;
+}
+
+.profile-container .form-group {
+    margin-bottom: 15px;
+}
+
+.profile-container .form-group label {
+    display: block;
+    color: #ADD8E6;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.profile-container .form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #48456C;
+    border-radius: 30px;
+}
+
+.profile-container .delete-button {
+    width: 100%;
+    max-width: 400px;
+    color: #ffffff;
+    padding: 10px;
+    border: none;
+    font-weight: bold;
+    border-radius: 30px;
+    margin-top: 20px;
+    background-color: #e74c3c;
+    cursor: pointer;
+}
+
+.profile-container .delete-button:hover {
+    opacity: 0.8;
+}
+
+.profile-container .error {
+    color: #e74c3c; 
+    margin-bottom: 10px;
+}
+
+.profile-container .success {
+    color: #2ecc71;
+    margin-bottom: 10px;
+}
