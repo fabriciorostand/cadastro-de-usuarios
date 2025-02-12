@@ -19,6 +19,7 @@ function Profile() {
     const [isModalOpen, setModalOpen] = useState(false); // Estado do modal
 
     const navigate = useNavigate();
+    const backendURL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -118,7 +119,7 @@ function Profile() {
                 </Link>
                 <div className='avatar-container'>
                     {profilePic ? (
-                        <img src={`http://localhost:8080/uploads/${profilePic}`} alt="Foto de Perfil" />
+                        <img src={`${backendURL}/uploads/${profilePic}`} alt="Foto de Perfil" />
                     ) : (
                         <FaUserCircle className='avatar' onClick={toggleDropdown} />
                     )}
